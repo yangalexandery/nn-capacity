@@ -3,23 +3,15 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-class FC(nn.Module):
-    def __init__(self, dim_list, input_dim = 32 * 32 * 3, output_dim = 10):
-        """Constructs a fully connected network with given hidden dimensions"""
-        super(FC, self).__init__()
-        self.fc_list = []
-        for h_dim in dim_list:
-            self.fc_list.append(nn.Linear(input_dim, h_dim))
-            input_dim = h_dim
+def FC(dim_list, input_dim = 32 * 32 * 3, output_dim = 10):
+    """Constructs a fully connected network with given hidden dimensions"""
+    modules = []
 
-        self.classification = nn.Linear(input_dim, output_dim)
+    for h_dim in dim_list:
+        modules.append(nn.Linear(input_dim, h_dim))
+        modules.append(nn.ELU())
+        input_dim = h_dim
 
-    def forward(self, input):
-        x = input
+    modules.append(nn.Linear(input_dim, output_dim))
 
-        for linear in self.fc_list:
-            x = F.elu(linear(x))
-
-        output = self.classification(x)
-
-        return output
+    return nn.Sequential(*modules)
