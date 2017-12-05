@@ -1,6 +1,6 @@
 import numpy as np
 
-sizes = [100, 500, 1000, 5000, 10000, 60000]
+sizes = [100, 500, 1000, 5000, 10000, 50000]
 dimension = 32 * 32 * 3
 num_labels = 10
 

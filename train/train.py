@@ -74,6 +74,12 @@ NAME_TO_MODEL = {
     'fc128': FC([128, 128, 128, 128]),
 }
 
+FLATTEN_TO_MODEL = {
+    'fc512': True,
+    'fc256': True,
+    'fc128': True,
+}
+
 
 if __name__ == '__main__':
     default_path = '../data'
@@ -89,11 +95,11 @@ if __name__ == '__main__':
 
     # dataset
     parser.add_argument('--data_path', default = default_path)
-    parser.add_argument('--file_path', default = 'random_1000.npz')
+    parser.add_argument('--file_path', default = 'random_50000.npz')
 
     # training
     parser.add_argument('--epochs', default = 500, type = int)
-    parser.add_argument('--batch', default = 4, type = int)
+    parser.add_argument('--batch', default = 64, type = int)
     parser.add_argument('--snapshot', default = 2, type = int)
     parser.add_argument('--workers', default = 8, type = int)
     parser.add_argument('--gpu', default = '7')
@@ -117,7 +123,7 @@ if __name__ == '__main__':
     # set up datasets and loaders
     data, loaders = {}, {}
     for split in ['train', 'val']:
-        data[split] = ImageLoader(data_path = args.data_path, split = split, file_path = args.file_path)
+        data[split] = ImageLoader(data_path = args.data_path, split = split, file_path = args.file_path, flatten = FLATTEN_TO_MODEL[args.name])
         loaders[split] = DataLoader(data[split], batch_size = args.batch, shuffle = True, num_workers = args.workers)
     print('==> dataset loaded')
     print('[size] = {0} + {1}'.format(len(data['train']), len(data['val'])))
@@ -149,6 +155,8 @@ if __name__ == '__main__':
             raise FileNotFoundError('no snapshot found at "{0}"'.format(args.resume))
     else:
         epoch = 0
+
+    best_top_5 = 0
 
     for epoch in range(epoch, args.epochs):
         step = epoch * len(data['train'])
