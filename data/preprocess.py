@@ -1,9 +1,14 @@
-import cPickle
+# import cPickle
 import numpy as np
 
+# def unpickle(file):
+#     with open(file, 'rb') as fo:
+#         dict = cPickle.load(fo)
+#     return dict
 def unpickle(file):
+    import pickle
     with open(file, 'rb') as fo:
-        dict = cPickle.load(fo)
+        dict = pickle.load(fo, encoding='bytes')
     return dict
 
 files = ["data_batch_1", "data_batch_2", "data_batch_3", "data_batch_4", "data_batch_5", "test_batch"]
