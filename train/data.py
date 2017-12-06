@@ -11,8 +11,8 @@ import time
 
 class ImageLoader(Dataset):
     def __init__(self, data_path, split, file_path='data.npz', flatten=True):
-        file_path = os.path.join(data_path, file_path)
-        self.dataset = np.load(file_path)
+        np_file_path = os.path.join(data_path, file_path)
+        self.dataset = np.load(np_file_path)
 
         self.normalize = transforms.Normalize(
             mean=[0.485, 0.456, 0.406],
@@ -28,8 +28,8 @@ class ImageLoader(Dataset):
 
         # If Data is Frome CIFAR then only take the first 50000 indicies
         if file_path == 'data.npz':
-            self.images = self.images[:50000, :]
-            self.labels = self.labels[:50000, :]
+            self.images = self.images[:50000]
+            self.labels = self.labels[:50000]
 
         self.process = True if len(self.images.shape) > 2 else False
 

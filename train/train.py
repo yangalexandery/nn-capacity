@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader
 from torch.nn import CrossEntropyLoss
 from torch.autograd import Variable
 from torch.nn.utils import clip_grad_norm
-from networks import FC
+from networks import FC, ConvSimple
 from data import ImageLoader
 
 import time
@@ -72,12 +72,14 @@ NAME_TO_MODEL = {
     'fc512': FC([512]),
     'fc256': FC([256, 256]),
     'fc128': FC([128, 128, 128, 128]),
+    'convsimple': ConvSimple(),
 }
 
 FLATTEN_TO_MODEL = {
     'fc512': True,
     'fc256': True,
     'fc128': True,
+    'convsimple': False,
 }
 
 
@@ -98,8 +100,8 @@ if __name__ == '__main__':
     parser.add_argument('--file_path', default = 'random_50000.npz')
 
     # training
-    parser.add_argument('--epochs', default = 500, type = int)
-    parser.add_argument('--batch', default = 64, type = int)
+    parser.add_argument('--epochs', default = 5000, type = int)
+    parser.add_argument('--batch', default = 256, type = int)
     parser.add_argument('--snapshot', default = 2, type = int)
     parser.add_argument('--workers', default = 8, type = int)
     parser.add_argument('--gpu', default = '7')
